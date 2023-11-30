@@ -27,13 +27,13 @@ jobs:
           echo "C:\depot_tools" | out-file "$env:GITHUB_PATH"
           echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | out-file "$env:GITHUB_ENV"
 
+      - name: Initialize gclient
+        shell: cmd
+        run: gclient
+
       - name: Fetch source code
         shell: cmd
-        run: |
-          gclient
-          fetch v8
-          echo %cd%
-          dir
+        run: fetch v8
 
       - name: Build x64 release
         shell: cmd
