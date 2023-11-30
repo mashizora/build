@@ -22,10 +22,10 @@ jobs:
       - name: Setup depot tools
         working-directory: C:\
         run: |
-          curl.exe -s -L $DEPOTTOOLS -o depot_tools.zip
-          7z.exe x depot_tools.zip -o*
-          echo "C:\depot_tools" >> %GITHUB_PATH%
-          echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" >> %GITHUB_ENV%
+          curl.exe -s -L "$env:DEPOTTOOLS" -o 'depot_tools.zip'
+          7z.exe x 'depot_tools.zip' -o*
+          echo 'C:\depot_tools.zip' >> %GITHUB_PATH%
+          echo 'DEPOT_TOOLS_WIN_TOOLCHAIN=0' >> %GITHUB_ENV%
 
       - name: Fetch source code
         working-directory: C:\
