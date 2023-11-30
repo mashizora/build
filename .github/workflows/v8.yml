@@ -1,0 +1,50 @@
+name: V8
+on: workflow_dispatch
+
+env:
+  DEPOTTOOLS: https://storage.googleapis.com/chrome-infra/depot_tools.zip
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global core.autocrlf false
+          git config --global core.filemode false
+          git config --global branch.autosetupmerge always
+          git config --global branch.autosetuprebase always
+
+      - name: Setup depot tools
+        working-directory: C:\
+        run: |
+          curl.exe -s -L $DEPOTTOOLS -o depot_tools.zip
+          7z.exe x depot_tools.zip -o*
+          echo "C:\depot_tools" >> %GITHUB_PATH%
+          echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" >> %GITHUB_ENV%
+
+      - name: Fetch source code
+        working-directory: C:\
+        shell: cmd
+        run: |
+          gclient
+          mkdir v8 && cd v8
+          fetch v8
+
+      - name: Build x64 release
+        working-directory: C:\v8
+        shell: cmd
+        run: |
+          python "v8\tools\dev\gm.py" x64.release
+
+      - run: tree
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: v8
+          path: C:\v8\v8\out.gn\x64.release
