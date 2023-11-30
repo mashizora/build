@@ -37,10 +37,7 @@ jobs:
 
       - name: Build x64 release
         shell: cmd
-        run: |
-          echo %cd%
-          dir
-          python "v8\tools\dev\gm.py" x64.release
+        run: python.exe "v8\tools\dev\gm.py" x64.release
 
       - name: Upload binary
         uses: actions/upload-artifact@v3
