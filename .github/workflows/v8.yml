@@ -9,34 +9,31 @@ jobs:
     name: Build
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
       - name: Setup git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global core.autocrlf false
           git config --global core.filemode false
+          git config --global core.longpaths true
           git config --global branch.autosetupmerge always
           git config --global branch.autosetuprebase always
 
-      - name: Setup depot tools
+      - name: Install depot tools
         working-directory: C:\
         run: |
-          curl.exe -s -L "$env:DEPOTTOOLS" -o 'depot_tools.zip'
-          7z.exe x 'depot_tools.zip' -o*
-          echo 'C:\depot_tools' | out-file "$env:GITHUB_PATH"
-          echo 'DEPOT_TOOLS_WIN_TOOLCHAIN=0' | out-file "$env:GITHUB_ENV"
+          curl.exe -s -L "$env:DEPOTTOOLS" -o "depot_tools.zip"
+          7z.exe x "depot_tools.zip" -o*
+          echo "C:\depot_tools" | out-file "$env:GITHUB_PATH"
+          echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | out-file "$env:GITHUB_ENV"
 
       - name: Fetch source code
-        working-directory: C:\
         shell: cmd
         run: |
           gclient
-          mkdir v8 && cd v8
           fetch v8
 
       - name: Build x64 release
-        working-directory: C:\v8
         shell: cmd
         run: |
           python "v8\tools\dev\gm.py" x64.release
@@ -47,4 +44,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: v8
-          path: C:\v8\v8\out.gn\x64.release
+          path: v8\out.gn\x64.release
