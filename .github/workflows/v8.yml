@@ -32,12 +32,14 @@ jobs:
         run: |
           gclient
           fetch v8
-          tree
+          echo %cd%
+          dir
 
       - name: Build x64 release
         shell: cmd
         run: |
-          tree
+          echo %cd%
+          dir
           python "v8\tools\dev\gm.py" x64.release
 
       - name: Upload binary
