@@ -24,8 +24,8 @@ jobs:
         run: |
           curl.exe -s -L "$env:DEPOTTOOLS" -o 'depot_tools.zip'
           7z.exe x 'depot_tools.zip' -o*
-          echo 'C:\depot_tools.zip' >> %GITHUB_PATH%
-          echo 'DEPOT_TOOLS_WIN_TOOLCHAIN=0' >> %GITHUB_ENV%
+          echo 'C:\depot_tools.zip' | out-file "$env:GITHUB_PATH"
+          echo 'DEPOT_TOOLS_WIN_TOOLCHAIN=0' | out-file "$env:GITHUB_ENV"
 
       - name: Fetch source code
         working-directory: C:\
