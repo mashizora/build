@@ -35,7 +35,7 @@ jobs:
         shell: cmd
         run: fetch v8
 
-      - name: Build x64 release
+      - name: Build
         shell: cmd
         run: cd v8 && python.exe "tools\dev\gm.py" x64.release
 
@@ -43,4 +43,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: v8
-          path: v8\out.gn\x64.release
+          path: v8\out\x64.release
