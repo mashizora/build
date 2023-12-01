@@ -19,7 +19,7 @@ jobs:
           git config --global branch.autosetuprebase always
 
       - name: Install depot tools
-        working-directory: $HOME
+        working-directory: ${{ env.HOME }}
         run: |
           curl -s -L "$DEPOT_TOOLS_URL" -o "depot_tools.zip"
           7z x "depot_tools.zip" -o*
@@ -55,7 +55,7 @@ jobs:
   #         git config --global branch.autosetuprebase always
 
   #     - name: Install depot tools
-  #       working-directory: $HOME
+  #       working-directory: ${{ env.HOME }}
   #       run: |
   #         curl.exe -s -L "$env:DEPOT_TOOLS_URL" -o "depot_tools.zip"
   #         7z.exe x "depot_tools.zip" -o*
@@ -94,7 +94,7 @@ jobs:
   #         git config --global branch.autosetuprebase always
 
   #     - name: Install depot tools
-  #       working-directory: $HOME
+  #       working-directory: ${{ env.HOME }}
   #       run: |
   #         curl -s -L "$DEPOT_TOOLS_URL" -o "depot_tools.zip"
   #         7z x "depot_tools.zip" -o*
