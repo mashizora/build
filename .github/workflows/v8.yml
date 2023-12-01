@@ -2,7 +2,8 @@ name: v8
 on: workflow_dispatch
 
 env:
-  DEPOT_TOOLS_URL: https://storage.googleapis.com/chrome-infra/depot_tools.zip
+  DEPOT_TOOLS_GIT: https://chromium.googlesource.com/chromium/tools/depot_tools.git
+  DEPOT_TOOLS_BUNDLE: https://storage.googleapis.com/chrome-infra/depot_tools.zip
 
 jobs:
   build-linux:
@@ -21,9 +22,10 @@ jobs:
       - name: Install depot tools
         working-directory: ${{ env.HOME }}
         run: |
-          curl -s -L "$DEPOT_TOOLS_URL" -o "depot_tools.zip"
-          7z x "depot_tools.zip" -o*
+          ls
+          git clone "$DEPOT_TOOLS_GIT"
           echo "$HOME/depot_tools" >> "$GITHUB_PATH"
+          ls
 
       - name: Initialize gclient
         run: gclient
@@ -59,7 +61,7 @@ jobs:
   #     - name: Install depot tools
   #       working-directory: ${{ env.HOME }}
   #       run: |
-  #         curl.exe -s -L "$env:DEPOT_TOOLS_URL" -o "depot_tools.zip"
+  #         curl.exe -s -L "$env:DEPOT_TOOLS_BUNDLE" -o "depot_tools.zip"
   #         7z.exe x "depot_tools.zip" -o*
   #         echo "$HOME\depot_tools" | out-file "$env:GITHUB_PATH"
   #         echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | out-file "$env:GITHUB_ENV"
@@ -98,7 +100,7 @@ jobs:
   #     - name: Install depot tools
   #       working-directory: ${{ env.HOME }}
   #       run: |
-  #         curl -s -L "$DEPOT_TOOLS_URL" -o "depot_tools.zip"
+  #         curl -s -L "$DEPOT_TOOLS_BUNDLE" -o "depot_tools.zip"
   #         7z x "depot_tools.zip" -o*
   #         echo "$HOME/depot_tools" >> "$GITHUB_PATH"
   #         ./build/install-build-deps.sh
