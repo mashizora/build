@@ -5,9 +5,9 @@ env:
   DEPOT_TOOLS_URL: https://storage.googleapis.com/chrome-infra/depot_tools.zip
 
 jobs:
-  build:
-    name: Build
-    runs-on: windows-latest
+  build-linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
     steps:
       - name: Setup git
         run: |
@@ -15,32 +15,103 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global core.autocrlf false
           git config --global core.filemode false
-          git config --global core.longpaths true
           git config --global branch.autosetupmerge always
           git config --global branch.autosetuprebase always
 
       - name: Install depot tools
-        working-directory: C:\
+        working-directory: $HOME
         run: |
-          curl.exe -s -L "$env:DEPOT_TOOLS_URL" -o "depot_tools.zip"
-          7z.exe x "depot_tools.zip" -o*
-          echo "C:\depot_tools" | out-file "$env:GITHUB_PATH"
-          echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | out-file "$env:GITHUB_ENV"
+          curl -s -L "$DEPOT_TOOLS_URL" -o "depot_tools.zip"
+          7z x "depot_tools.zip" -o*
+          echo "$HOME/depot_tools" >> "$GITHUB_PATH"
+          ./build/install-build-deps.sh
 
       - name: Initialize gclient
-        shell: cmd
         run: gclient
 
       - name: Fetch source code
-        shell: cmd
         run: fetch v8
 
       - name: Build
-        shell: cmd
-        run: cd v8 && python.exe "tools\dev\gm.py" x64.release
+        run: cd v8 && python "./tools/dev/gm.py" x64.release
 
       - name: Upload binary
         uses: actions/upload-artifact@v3
         with:
           name: v8
-          path: v8\out\x64.release
+          path: ./v8/out/x64.release
+
+  # build-windows:
+  #   name: Build Windows
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Setup git
+  #       run: |
+  #         git config --global user.name "github-actions[bot]"
+  #         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  #         git config --global core.autocrlf false
+  #         git config --global core.filemode false
+  #         git config --global branch.autosetupmerge always
+  #         git config --global branch.autosetuprebase always
+
+  #     - name: Install depot tools
+  #       working-directory: $HOME
+  #       run: |
+  #         curl.exe -s -L "$env:DEPOT_TOOLS_URL" -o "depot_tools.zip"
+  #         7z.exe x "depot_tools.zip" -o*
+  #         echo "$HOME\depot_tools" | out-file "$env:GITHUB_PATH"
+  #         echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | out-file "$env:GITHUB_ENV"
+
+  #     - name: Initialize gclient
+  #       shell: cmd
+  #       run: gclient
+
+  #     - name: Fetch source code
+  #       shell: cmd
+  #       run: fetch v8
+
+  #     - name: Build
+  #       shell: cmd
+  #       run: cd v8 && python.exe ".\tools\dev\gm.py" x64.release
+
+  #     - name: Upload binary
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: v8
+  #         path: v8\out\x64.release
+
+  # build-macos:
+  #   name: Build macOS
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Setup git
+  #       run: |
+  #         git config --global user.name "github-actions[bot]"
+  #         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  #         git config --global core.autocrlf false
+  #         git config --global core.filemode false
+  #         git config --global branch.autosetupmerge always
+  #         git config --global branch.autosetuprebase always
+
+  #     - name: Install depot tools
+  #       working-directory: $HOME
+  #       run: |
+  #         curl -s -L "$DEPOT_TOOLS_URL" -o "depot_tools.zip"
+  #         7z x "depot_tools.zip" -o*
+  #         echo "$HOME/depot_tools" >> "$GITHUB_PATH"
+  #         ./build/install-build-deps.sh
+
+  #     - name: Initialize gclient
+  #       run: gclient
+
+  #     - name: Fetch source code
+  #       run: fetch v8
+
+  #     - name: Build
+  #       run: cd v8 && python "./tools/dev/gm.py" x64.release
+
+  #     - name: Upload binary
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: v8
+  #         path: v8\out\x64.release
