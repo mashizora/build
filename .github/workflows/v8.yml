@@ -22,10 +22,11 @@ jobs:
       - name: Install depot tools
         working-directory: ${{ env.HOME }}
         run: |
-          ls
-          git clone "$DEPOT_TOOLS_GIT"
-          echo "$HOME/depot_tools" >> "$GITHUB_PATH"
-          ls
+          pwd
+          git clone $DEPOT_TOOLS_GIT
+          export PATH=$HOME/depot_tools:$PATH
+          echo "$HOME/depot_tools"
+          echo "$HOME/depot_tools" >> $GITHUB_PATH
 
       - name: Initialize gclient
         run: gclient
@@ -37,7 +38,7 @@ jobs:
         run: |
           cd v8
           ./build/install-build-deps.sh
-          python "./tools/dev/gm.py" x64.release
+          python ./tools/dev/gm.py x64.release
 
       - name: Upload binary
         uses: actions/upload-artifact@v3
