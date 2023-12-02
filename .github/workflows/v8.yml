@@ -118,12 +118,12 @@ jobs:
 
       - name: Build
         working-directory: ./v8
-        run: python3 ./tools/dev/gm.py x64.release
+        run: python3 ./tools/dev/gm.py arm64.release
 
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: v8-x64-macos
+          name: v8-arm64-macos
           path: |
             ./v8/include
-            ./v8/out/x64.release
+            ./v8/out/arm64.release
