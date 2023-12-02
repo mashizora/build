@@ -24,7 +24,7 @@ jobs:
         run: |
           cd $HOME
           git clone $DEPOT_TOOLS_GIT
-          echo $HOME/depot_tools >> $GITHUB_PATH
+          echo "$HOME/depot_tools" >> $GITHUB_PATH
 
       - name: Initialize gclient
         run: |
@@ -63,13 +63,12 @@ jobs:
           git config --global branch.autosetuprebase always
 
       - name: Setup depot tools
-        shell: cmd
         run: |
-          cd %USERPROFILE%
-          curl -sL %DEPOT_TOOLS_BUNDLE% -o depot_tools.zip
-          7z x depot_tools.zip -o*
-          echo %USERPROFILE%\depot_tools >> %GITHUB_PATH%
-          echo DEPOT_TOOLS_WIN_TOOLCHAIN=0 >> %GITHUB_ENV%
+          cd $HOME
+          curl -sL $env:DEPOT_TOOLS_BUNDLE -o depot_tools.zip
+          7z.exe x depot_tools.zip -o*
+          echo "$HOME\depot_tools" | out-file $env:GITHUB_PATH
+          echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | out-file $env:GITHUB_ENV
 
       - name: Initialize gclient
         shell: cmd
@@ -111,7 +110,7 @@ jobs:
         run: |
           cd $HOME
           git clone $DEPOT_TOOLS_GIT
-          echo $HOME/depot_tools >> $GITHUB_PATH
+          echo "$HOME/depot_tools" >> $GITHUB_PATH
 
       - name: Initialize gclient
         run: gclient
