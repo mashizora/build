@@ -81,7 +81,7 @@ jobs:
 
       - name: Checkout stable branch
         working-directory: .\v8
-        run: git checkout branch-heads/$STABLE_BRANCH
+        run: git checkout branch-heads/$env:STABLE_BRANCH
 
       - name: Build
         shell: cmd
