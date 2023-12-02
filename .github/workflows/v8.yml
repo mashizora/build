@@ -2,7 +2,7 @@ name: v8
 on: workflow_dispatch
 
 env:
-  STABLE_BRANCH: 12.0
+  STABLE_BRANCH: "12.0"
   DEPOT_TOOLS_GIT: https://chromium.googlesource.com/chromium/tools/depot_tools.git
   DEPOT_TOOLS_BUNDLE: https://storage.googleapis.com/chrome-infra/depot_tools.zip
 
