@@ -27,17 +27,18 @@ jobs:
           echo "$HOME/depot_tools" >> $GITHUB_PATH
 
       - name: Initialize gclient
-        run: |
-          gclient
+        run: gclient
 
       - name: Fetch source code
-        run: |
-          fetch v8
+        run: fetch v8
+
+      - name: Checkout stable branch
+        working-directory: ./v8
+        run: git checkout branch-heads/$STABLE_BRANCH
 
       - name: Build
+        working-directory: ./v8
         run: |
-          cd v8
-          git checkout branch-heads/$STABLE_BRANCH
           ./build/install-build-deps.sh
           python ./tools/dev/gm.py x64.release
 
@@ -78,12 +79,14 @@ jobs:
         shell: cmd
         run: fetch v8
 
+      - name: Checkout stable branch
+        working-directory: .\v8
+        run: git checkout branch-heads/$STABLE_BRANCH
+
       - name: Build
         shell: cmd
-        run: |
-          cd v8
-          git checkout branch-heads/%STABLE_BRANCH%
-          python .\tools\dev\gm.py x64.release
+        working-directory: .\v8
+        run: python .\tools\dev\gm.py x64.release
 
       - name: Upload
         uses: actions/upload-artifact@v3
@@ -118,11 +121,13 @@ jobs:
       - name: Fetch source code
         run: fetch v8
 
+      - name: Checkout stable branch
+        working-directory: ./v8
+        run: git checkout branch-heads/$STABLE_BRANCH
+
       - name: Build
-        run: |
-          cd v8
-          git checkout branch-heads/$STABLE_BRANCH
-          python ./tools/dev/gm.py x64.release
+        working-directory: ./v8
+        run: python ./tools/dev/gm.py x64.release
 
       - name: Upload
         uses: actions/upload-artifact@v3
