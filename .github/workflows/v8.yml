@@ -11,18 +11,15 @@ jobs:
     name: Build Linux
     runs-on: ubuntu-latest
     steps:
-      - name: Setup git
+      - name: Setup depot_tools
         run: |
+          cd $HOME
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global core.autocrlf false
           git config --global core.filemode false
           git config --global branch.autosetupmerge always
           git config --global branch.autosetuprebase always
-
-      - name: Setup depot tools
-        run: |
-          cd $HOME
           git clone $DEPOT_TOOLS_GIT
           echo "$HOME/depot_tools" >> $GITHUB_PATH
 
@@ -54,18 +51,15 @@ jobs:
     name: Build Windows
     runs-on: windows-latest
     steps:
-      - name: Setup git
+      - name: Setup depot_tools
         run: |
+          cd $HOME
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global core.autocrlf false
           git config --global core.filemode false
           git config --global branch.autosetupmerge always
           git config --global branch.autosetuprebase always
-
-      - name: Setup depot tools
-        run: |
-          cd $HOME
           curl -sL $env:DEPOT_TOOLS_BUNDLE -o depot_tools.zip
           7z.exe x depot_tools.zip -o*
           echo "$HOME\depot_tools" | out-file $env:GITHUB_PATH
@@ -100,18 +94,15 @@ jobs:
     name: Build macOS
     runs-on: macos-latest
     steps:
-      - name: Setup git
+      - name: Setup depot_tools
         run: |
+          cd $HOME
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global core.autocrlf false
           git config --global core.filemode false
           git config --global branch.autosetupmerge always
           git config --global branch.autosetuprebase always
-
-      - name: Setup depot tools
-        run: |
-          cd $HOME
           git clone $DEPOT_TOOLS_GIT
           echo "$HOME/depot_tools" >> $GITHUB_PATH
 
