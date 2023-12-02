@@ -37,7 +37,8 @@ jobs:
         working-directory: ./v8
         run: |
           ./build/install-build-deps.sh
-          python3 ./tools/dev/gm.py x64.release
+          python3 ./tools/dev/v8gen.py x64.release
+          ninja -C out.gn/x64.release v8_monolith
 
       - name: Upload
         uses: actions/upload-artifact@v3
@@ -45,85 +46,85 @@ jobs:
           name: v8-x64-linux
           path: |
             ./v8/include
-            ./v8/out/x64.release
+            ./v8/out.gn/x64.release
 
-  build-windows:
-    name: Build Windows
-    runs-on: windows-latest
-    steps:
-      - name: Setup depot_tools
-        run: |
-          cd $HOME
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global core.autocrlf false
-          git config --global core.filemode false
-          git config --global branch.autosetupmerge always
-          git config --global branch.autosetuprebase always
-          curl -sL $env:DEPOT_TOOLS_BUNDLE -o depot_tools.zip
-          7z.exe x depot_tools.zip -o*
-          echo "$HOME\depot_tools" | out-file $env:GITHUB_PATH
-          echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | out-file $env:GITHUB_ENV
+  # build-windows:
+  #   name: Build Windows
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Setup depot_tools
+  #       run: |
+  #         cd $HOME
+  #         git config --global user.name "github-actions[bot]"
+  #         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  #         git config --global core.autocrlf false
+  #         git config --global core.filemode false
+  #         git config --global branch.autosetupmerge always
+  #         git config --global branch.autosetuprebase always
+  #         curl -sL $env:DEPOT_TOOLS_BUNDLE -o depot_tools.zip
+  #         7z.exe x depot_tools.zip -o*
+  #         echo "$HOME\depot_tools" | out-file $env:GITHUB_PATH
+  #         echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | out-file $env:GITHUB_ENV
 
-      - name: Initialize gclient
-        shell: cmd
-        run: gclient
+  #     - name: Initialize gclient
+  #       shell: cmd
+  #       run: gclient
 
-      - name: Fetch source code
-        shell: cmd
-        run: fetch v8
+  #     - name: Fetch source code
+  #       shell: cmd
+  #       run: fetch v8
 
-      - name: Checkout stable branch
-        working-directory: .\v8
-        run: git checkout branch-heads/$env:STABLE_BRANCH
+  #     - name: Checkout stable branch
+  #       working-directory: .\v8
+  #       run: git checkout branch-heads/$env:STABLE_BRANCH
 
-      - name: Build
-        shell: cmd
-        working-directory: .\v8
-        run: python3 .\tools\dev\gm.py x64.release
+  #     - name: Build
+  #       shell: cmd
+  #       working-directory: .\v8
+  #       run: python3 .\tools\dev\gm.py x64.release
 
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: v8-x64-windows
-          path: |
-            .\v8\include
-            .\v8\out\x64.release
+  #     - name: Upload
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: v8-x64-windows
+  #         path: |
+  #           .\v8\include
+  #           .\v8\out\x64.release
 
-  build-macos:
-    name: Build macOS
-    runs-on: macos-latest
-    steps:
-      - name: Setup depot_tools
-        run: |
-          cd $HOME
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global core.autocrlf false
-          git config --global core.filemode false
-          git config --global branch.autosetupmerge always
-          git config --global branch.autosetuprebase always
-          git clone $DEPOT_TOOLS_GIT
-          echo "$HOME/depot_tools" >> $GITHUB_PATH
+  # build-macos:
+  #   name: Build macOS
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Setup depot_tools
+  #       run: |
+  #         cd $HOME
+  #         git config --global user.name "github-actions[bot]"
+  #         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  #         git config --global core.autocrlf false
+  #         git config --global core.filemode false
+  #         git config --global branch.autosetupmerge always
+  #         git config --global branch.autosetuprebase always
+  #         git clone $DEPOT_TOOLS_GIT
+  #         echo "$HOME/depot_tools" >> $GITHUB_PATH
 
-      - name: Initialize gclient
-        run: gclient
+  #     - name: Initialize gclient
+  #       run: gclient
 
-      - name: Fetch source code
-        run: fetch v8
+  #     - name: Fetch source code
+  #       run: fetch v8
 
-      - name: Checkout stable branch
-        working-directory: ./v8
-        run: git checkout branch-heads/$STABLE_BRANCH
+  #     - name: Checkout stable branch
+  #       working-directory: ./v8
+  #       run: git checkout branch-heads/$STABLE_BRANCH
 
-      - name: Build
-        working-directory: ./v8
-        run: python3 ./tools/dev/gm.py arm64.release
+  #     - name: Build
+  #       working-directory: ./v8
+  #       run: python3 ./tools/dev/gm.py arm64.release
 
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: v8-arm64-macos
-          path: |
-            ./v8/include
-            ./v8/out/arm64.release
+  #     - name: Upload
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: v8-arm64-macos
+  #         path: |
+  #           ./v8/include
+  #           ./v8/out/arm64.release
