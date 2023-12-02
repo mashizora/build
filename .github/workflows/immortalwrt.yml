@@ -12,7 +12,9 @@ jobs:
       run:
         working-directory: immortalwrt
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup build environment
         env:
           DEBIAN_FRONTEND: noninteractive
