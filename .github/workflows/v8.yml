@@ -19,7 +19,7 @@ jobs:
           git config --global branch.autosetupmerge always
           git config --global branch.autosetuprebase always
 
-      - name: Install depot tools
+      - name: Setup depot tools
         run: |
           cd $HOME
           git clone $DEPOT_TOOLS_GIT
@@ -39,11 +39,13 @@ jobs:
           ./build/install-build-deps.sh
           python ./tools/dev/gm.py x64.release
 
-      - name: Upload binary
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: v8
-          path: ./v8/out/x64.release
+          name: v8-x64-linux
+          path: |
+            ./v8/include
+            ./v8/out/x64.release
 
   build-windows:
     name: Build Windows
@@ -58,7 +60,7 @@ jobs:
           git config --global branch.autosetupmerge always
           git config --global branch.autosetuprebase always
 
-      - name: Install depot tools
+      - name: Setup depot tools
         run: |
           cd $HOME
           curl.exe -s -L $env:DEPOT_TOOLS_BUNDLE -o depot_tools.zip
@@ -82,11 +84,13 @@ jobs:
           cd v8
           python.exe .\tools\dev\gm.py x64.release
 
-      - name: Upload binary
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: v8
-          path: .\v8\out\x64.release
+          name: v8-x64-windows
+          path: |
+            .\v8\include
+            .\v8\out\x64.release
 
   build-macos:
     name: Build macOS
@@ -101,7 +105,7 @@ jobs:
           git config --global branch.autosetupmerge always
           git config --global branch.autosetuprebase always
 
-      - name: Install depot tools
+      - name: Setup depot tools
         run: |
           cd $HOME
           git clone $DEPOT_TOOLS_GIT
@@ -120,8 +124,10 @@ jobs:
           cd v8
           python ./tools/dev/gm.py x64.release
 
-      - name: Upload binary
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: v8
-          path: ./v8/out/x64.release
+          name: v8-x64-macos
+          path: |
+            ./v8/include
+            ./v8/out/x64.release
