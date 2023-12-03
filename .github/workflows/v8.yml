@@ -52,8 +52,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: v8-x64-linux
-          path: |
-            v8/out/x64.linux
+          path: v8/out/x64.linux/obj/libv8_monolith.a
 
   build-windows:
     name: Build Windows
@@ -101,8 +100,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: v8-x64-windows
-          path: |
-            v8/out/x64.windows
+          path: v8/out/x64.windows/obj/v8_monolith.lib
 
   build-macos:
     name: Build macOS
@@ -146,5 +144,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: v8-arm64-macos
-          path: |
-            v8/out/arm64.macos
+          path: v8/out/arm64.macos/obj/libv8_monolith.a
