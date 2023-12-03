@@ -2,7 +2,7 @@ name: v8
 on: workflow_dispatch
 
 env:
-  REPOSITORY_PATH: ${{ github.workspace }}/build.${{ github.sha }}
+  REPOSITORY_PATH: ${{ github.workspace }}/${{ github.repository_id }}.${{ github.sha }}
 
   STABLE_BRANCH: "12.0"
   DEPOT_TOOLS_GIT: https://chromium.googlesource.com/chromium/tools/depot_tools.git
@@ -37,14 +37,15 @@ jobs:
         run: fetch v8
 
       - name: Checkout stable branch
-        working-directory: ./v8
+        working-directory: v8
         run: git checkout branch-heads/$STABLE_BRANCH
 
       - name: Build
-        working-directory: ./v8
+        working-directory: v8
         run: |
           ./build/install-build-deps.sh
-          python3 ./tools/dev/v8gen.py x64.release -- v8_monolithic=true v8_use_external_startup_data=false
+          python3 tools/dev/v8gen.py x64.release
+          cat $REPOSITORY_PATH/v8/args.gn >> out.gn/x64.release/args.gn
           ninja -C out.gn/x64.release d8
 
       - name: Upload
@@ -52,86 +53,99 @@ jobs:
         with:
           name: v8-x64-linux
           path: |
-            ./v8/include
-            ./v8/out.gn/x64.release
+            v8/out.gn/x64.release
 
-  # build-windows:
-  #   name: Build Windows
-  #   runs-on: windows-latest
-  #   steps:
-  #     - name: Setup depot_tools
-  #       run: |
-  #         cd $HOME
-  #         git config --global user.name "github-actions[bot]"
-  #         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-  #         git config --global core.autocrlf false
-  #         git config --global core.filemode false
-  #         git config --global branch.autosetupmerge always
-  #         git config --global branch.autosetuprebase always
-  #         curl -sL $env:DEPOT_TOOLS_BUNDLE -o depot_tools.zip
-  #         7z.exe x depot_tools.zip -o*
-  #         echo "$HOME\depot_tools" | out-file $env:GITHUB_PATH
-  #         echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | out-file $env:GITHUB_ENV
+  build-windows:
+    name: Build Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: ${{ env.REPOSITORY_PATH }}
 
-  #     - name: Initialize gclient
-  #       shell: cmd
-  #       run: gclient
+      - name: Setup depot_tools
+        run: |
+          cd $HOME
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global core.autocrlf false
+          git config --global core.filemode false
+          git config --global branch.autosetupmerge always
+          git config --global branch.autosetuprebase always
+          curl -sL $env:DEPOT_TOOLS_BUNDLE -o depot_tools.zip
+          7z.exe x depot_tools.zip -o*
+          echo "$HOME\depot_tools" | out-file $env:GITHUB_PATH
+          echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | out-file $env:GITHUB_ENV
 
-  #     - name: Fetch source code
-  #       shell: cmd
-  #       run: fetch v8
+      - name: Initialize gclient
+        shell: cmd
+        run: gclient
 
-  #     - name: Checkout stable branch
-  #       working-directory: .\v8
-  #       run: git checkout branch-heads/$env:STABLE_BRANCH
+      - name: Fetch source code
+        shell: cmd
+        run: fetch v8
 
-  #     - name: Build
-  #       shell: cmd
-  #       working-directory: .\v8
-  #       run: python3 .\tools\dev\gm.py x64.release
+      - name: Checkout stable branch
+        working-directory: v8
+        run: git checkout branch-heads/$env:STABLE_BRANCH
 
-  #     - name: Upload
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: v8-x64-windows
-  #         path: |
-  #           .\v8\include
-  #           .\v8\out\x64.release
+      - name: Build
+        shell: cmd
+        working-directory: v8
+        run: |
+          python3 tools/dev/v8gen.py x64.release
+          type %REPOSITORY_PATH%/v8/args.gn >> out.gn/x64.release/args.gn
+          ninja -C out.gn/x64.release d8
 
-  # build-macos:
-  #   name: Build macOS
-  #   runs-on: macos-latest
-  #   steps:
-  #     - name: Setup depot_tools
-  #       run: |
-  #         cd $HOME
-  #         git config --global user.name "github-actions[bot]"
-  #         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-  #         git config --global core.autocrlf false
-  #         git config --global core.filemode false
-  #         git config --global branch.autosetupmerge always
-  #         git config --global branch.autosetuprebase always
-  #         git clone $DEPOT_TOOLS_GIT
-  #         echo "$HOME/depot_tools" >> $GITHUB_PATH
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: v8-x64-windows
+          path: |
+            v8/out.gn/x64.release
 
-  #     - name: Initialize gclient
-  #       run: gclient
+  build-macos:
+    name: Build macOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: ${{ env.REPOSITORY_PATH }}
 
-  #     - name: Fetch source code
-  #       run: fetch v8
+      - name: Setup depot_tools
+        run: |
+          cd $HOME
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global core.autocrlf false
+          git config --global core.filemode false
+          git config --global branch.autosetupmerge always
+          git config --global branch.autosetuprebase always
+          git clone $DEPOT_TOOLS_GIT
+          echo "$HOME/depot_tools" >> $GITHUB_PATH
 
-  #     - name: Checkout stable branch
-  #       working-directory: ./v8
-  #       run: git checkout branch-heads/$STABLE_BRANCH
+      - name: Initialize gclient
+        run: gclient
 
-  #     - name: Build
-  #       working-directory: ./v8
-  #       run: python3 ./tools/dev/gm.py arm64.release
+      - name: Fetch source code
+        run: fetch v8
 
-  #     - name: Upload
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: v8-arm64-macos
-  #         path: |
-  #           ./v8/include
-  #           ./v8/out/arm64.release
+      - name: Checkout stable branch
+        working-directory: v8
+        run: git checkout branch-heads/$STABLE_BRANCH
+
+      - name: Build
+        working-directory: v8
+        run: |
+          python3 tools/dev/v8gen.py arm64.release
+          cat $REPOSITORY_PATH/v8/args.gn >> out.gn/arm64.release/args.gn
+          ninja -C out.gn/arm64.release d8
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: v8-arm64-macos
+          path: |
+            v8/out/arm64.release
