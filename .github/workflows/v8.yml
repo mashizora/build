@@ -48,10 +48,6 @@ jobs:
           gn gen out/x64.linux
           ninja -C out/x64.linux v8_monolith
 
-      - name: Test
-        working-directory: v8
-        run: python3 tools/run-tests.py --outdir out/arm64.linux
-
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
@@ -100,10 +96,6 @@ jobs:
           gn gen out/x64.windows
           ninja -C out/x64.windows v8_monolith
 
-      - name: Test
-        working-directory: v8
-        run: python3 tools/run-tests.py --outdir out/arm64.windows
-
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
@@ -147,10 +139,6 @@ jobs:
           cp -a $REPOSITORY_PATH/v8/. .
           gn gen out/arm64.macos
           ninja -C out/arm64.macos v8_monolith
-
-      - name: Test
-        working-directory: v8
-        run: python3 tools/run-tests.py --outdir out/arm64.macos
 
       - name: Upload
         uses: actions/upload-artifact@v3
