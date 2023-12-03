@@ -91,7 +91,6 @@ jobs:
         run: git checkout branch-heads/$env:STABLE_BRANCH
 
       - name: Build
-        shell: cmd
         working-directory: v8
         run: |
           python3 tools/dev/v8gen.py x64.release
