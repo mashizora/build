@@ -46,7 +46,7 @@ jobs:
           ./build/install-build-deps.sh
           python3 tools/dev/v8gen.py x64.release
           cat $REPOSITORY_PATH/v8/args.gn >> out.gn/x64.release/args.gn
-          ninja -C out.gn/x64.release d8
+          ninja -C out.gn/x64.release v8_monolith
 
       - name: Upload
         uses: actions/upload-artifact@v3
@@ -95,7 +95,7 @@ jobs:
         run: |
           python3 tools/dev/v8gen.py x64.release
           cat $env:REPOSITORY_PATH/v8/args.gn | out-file out.gn/x64.release/args.gn -append
-          ninja -C out.gn/x64.release d8
+          ninja -C out.gn/x64.release v8_monolith
 
       - name: Upload
         uses: actions/upload-artifact@v3
@@ -140,7 +140,7 @@ jobs:
         run: |
           python3 tools/dev/v8gen.py arm64.release
           cat $REPOSITORY_PATH/v8/args.gn >> out.gn/arm64.release/args.gn
-          ninja -C out.gn/arm64.release d8
+          ninja -C out.gn/arm64.release v8_monolith
 
       - name: Upload
         uses: actions/upload-artifact@v3
