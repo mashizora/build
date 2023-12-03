@@ -13,7 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          path: $REPOSITORY_PATH
+          path: ${{ env.REPOSITORY_PATH }}
 
       - name: Install dependencies
         env:
