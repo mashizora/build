@@ -2,7 +2,7 @@ name: immortalwrt
 on: workflow_dispatch
 
 env:
-  REPOSITORY_PATH: ${{ github.workspace }}/${{ github.repository_id }}.${{ github.sha }}
+  REPOSITORY_PATH: ${{ github.workspace }}/${{ github.sha }}
 
   IMAGEBUILDER_URL: https://downloads.immortalwrt.org/releases/23.05.1/targets/x86/64/immortalwrt-imagebuilder-23.05.1-x86-64.Linux-x86_64.tar.xz
 

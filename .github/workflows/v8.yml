@@ -2,7 +2,7 @@ name: v8
 on: workflow_dispatch
 
 env:
-  REPOSITORY_PATH: ${{ github.workspace }}/${{ github.repository_id }}.${{ github.sha }}
+  REPOSITORY_PATH: ${{ github.workspace }}/${{ github.sha }}
 
   STABLE_BRANCH: "12.0"
   DEPOT_TOOLS_GIT: https://chromium.googlesource.com/chromium/tools/depot_tools.git
