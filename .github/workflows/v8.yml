@@ -2,6 +2,8 @@ name: v8
 on: workflow_dispatch
 
 env:
+  REPOSITORY_PATH: ${{ github.workspace }}/build.${{ github.sha }}
+
   STABLE_BRANCH: "12.0"
   DEPOT_TOOLS_GIT: https://chromium.googlesource.com/chromium/tools/depot_tools.git
   DEPOT_TOOLS_BUNDLE: https://storage.googleapis.com/chrome-infra/depot_tools.zip
@@ -11,6 +13,11 @@ jobs:
     name: Build Linux
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: ${{ env.REPOSITORY_PATH }}
+
       - name: Setup depot_tools
         run: |
           cd $HOME
@@ -38,7 +45,7 @@ jobs:
         run: |
           ./build/install-build-deps.sh
           python3 ./tools/dev/v8gen.py x64.release -- v8_monolithic=true v8_use_external_startup_data=false
-          ninja -C out.gn/x64.release
+          ninja -C out.gn/x64.release d8
 
       - name: Upload
         uses: actions/upload-artifact@v3
