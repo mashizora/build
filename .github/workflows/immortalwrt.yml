@@ -2,20 +2,20 @@ name: immortalwrt
 on: workflow_dispatch
 
 env:
-  IMAGEBUILDER: https://downloads.immortalwrt.org/releases/23.05.1/targets/x86/64/immortalwrt-imagebuilder-23.05.1-x86-64.Linux-x86_64.tar.xz
+  REPOSITORY_PATH: ${{ env.GITHUB_WORKSPACE }}/build.${{ env.GITHUB_SHA }}
+  IMAGEBUILDER_URL: https://downloads.immortalwrt.org/releases/23.05.1/targets/x86/64/immortalwrt-imagebuilder-23.05.1-x86-64.Linux-x86_64.tar.xz
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: immortalwrt
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          path: $REPOSITORY_PATH
 
-      - name: Setup build environment
+      - name: Install dependencies
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
@@ -26,7 +26,7 @@ jobs:
 
       - name: Download imagebuilder
         run: |
-          curl -s -L $IMAGEBUILDER -o builder.tar.xz
+          curl -s -L $IMAGEBUILDER_URL -o builder.tar.xz
           tar -Jxf builder.tar.xz --strip-components=1
 
       - name: Patch build config
@@ -41,6 +41,7 @@ jobs:
 
       - name: Build images
         run: |
+          cp -a $REPOSITORY_PATH/immortalwrt/. .
           make image FILES="files" PACKAGES="luci-app-homeproxy"
 
       - name: Upload images
