@@ -94,7 +94,7 @@ jobs:
         working-directory: v8
         run: |
           python3 tools/dev/v8gen.py x64.release
-          type %REPOSITORY_PATH%/v8/args.gn >> out.gn/x64.release/args.gn
+          cat $env:REPOSITORY_PATH/v8/args.gn | out-file out.gn/x64.release/args.gn -append
           ninja -C out.gn/x64.release d8
 
       - name: Upload
