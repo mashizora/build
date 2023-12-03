@@ -147,4 +147,4 @@ jobs:
         with:
           name: v8-arm64-macos
           path: |
-            v8/out/arm64.release
+            v8/out.gn/arm64.release
