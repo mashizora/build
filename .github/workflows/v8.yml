@@ -125,7 +125,7 @@ jobs:
         working-directory: v8
         run: |
           cp $env:REPOSITORY_PATH/v8/* . -recurse -force
-          git apply patches/01-fix-icu-build-on-mscv.patch
+          git apply --no-index -v patches/01-fix-icu-build-error.patch
           gn gen out/x64.windows
           ninja -C out/x64.windows v8_monolith
 
