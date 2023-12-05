@@ -1,4 +1,5 @@
 target_cpu = "arm64"
+target_os = "mac"
 
 is_debug = false
 symbol_level = 0

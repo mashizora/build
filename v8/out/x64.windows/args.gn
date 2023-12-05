@@ -1,6 +1,8 @@
 target_cpu = "x64"
+target_os = "win"
 
 is_debug = false
+is_clang = false
 symbol_level = 0
 strip_debug_info = true
 dcheck_always_on = false
