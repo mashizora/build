@@ -9,37 +9,37 @@ env:
   DEPOT_TOOLS_BUNDLE: https://storage.googleapis.com/chrome-infra/depot_tools.zip
 
 jobs:
-  upload-include:
-    name: Upload Include
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup depot_tools
-        run: |
-          cd $HOME
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global core.autocrlf false
-          git config --global core.filemode false
-          git config --global branch.autosetupmerge always
-          git config --global branch.autosetuprebase always
-          git clone $DEPOT_TOOLS_GIT
-          echo "$HOME/depot_tools" >> $GITHUB_PATH
+  # upload-include:
+  #   name: Upload Include
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Setup depot_tools
+  #       run: |
+  #         cd $HOME
+  #         git config --global user.name "github-actions[bot]"
+  #         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  #         git config --global core.autocrlf false
+  #         git config --global core.filemode false
+  #         git config --global branch.autosetupmerge always
+  #         git config --global branch.autosetuprebase always
+  #         git clone $DEPOT_TOOLS_GIT
+  #         echo "$HOME/depot_tools" >> $GITHUB_PATH
 
-      - name: Initialize gclient
-        run: gclient
+  #     - name: Initialize gclient
+  #       run: gclient
 
-      - name: Fetch source code
-        run: fetch v8
+  #     - name: Fetch source code
+  #       run: fetch v8
 
-      - name: Checkout stable branch
-        working-directory: v8
-        run: git checkout branch-heads/$STABLE_BRANCH
+  #     - name: Checkout stable branch
+  #       working-directory: v8
+  #       run: git checkout branch-heads/$STABLE_BRANCH
 
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: include
-          path: v8/include
+  #     - name: Upload
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: include
+  #         path: v8/include
 
   # build-linux:
   #   name: Build Linux
@@ -90,12 +90,7 @@ jobs:
     name: Build Windows
     runs-on: windows-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          path: ${{ env.REPOSITORY_PATH }}
-
-      - name: Setup depot_tools
+      - name: Setup environment
         run: |
           cd $HOME
           git config --global user.name "github-actions[bot]"
@@ -108,6 +103,11 @@ jobs:
           7z.exe x depot_tools.zip -o*
           echo "$HOME\depot_tools" | out-file $env:GITHUB_PATH
           echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | out-file $env:GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: ${{ env.REPOSITORY_PATH }}
 
       - name: Initialize gclient
         shell: cmd
@@ -125,7 +125,7 @@ jobs:
         working-directory: v8
         run: |
           cp $env:REPOSITORY_PATH/v8/* . -recurse -force
-          git apply --no-index -v patches/01-fix-icu-build-error.patch
+          git apply patches/01-fix-icu-build-error.patch
           gn gen out/x64.windows
           ninja -C out/x64.windows v8_monolith
 
