@@ -13,7 +13,7 @@ jobs:
   #   name: Upload Include
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - name: Setup depot_tools
+  #     - name: Set up environment
   #       run: |
   #         cd $HOME
   #         git config --global user.name "github-actions[bot]"
@@ -45,12 +45,7 @@ jobs:
   #   name: Build Linux
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #       with:
-  #         path: ${{ env.REPOSITORY_PATH }}
-
-  #     - name: Setup depot_tools
+  #     - name: Set up environment
   #       run: |
   #         cd $HOME
   #         git config --global user.name "github-actions[bot]"
@@ -61,6 +56,11 @@ jobs:
   #         git config --global branch.autosetuprebase always
   #         git clone $DEPOT_TOOLS_GIT
   #         echo "$HOME/depot_tools" >> $GITHUB_PATH
+
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         path: ${{ env.REPOSITORY_PATH }}
 
   #     - name: Initialize gclient
   #       run: gclient
@@ -90,7 +90,7 @@ jobs:
     name: Build Windows
     runs-on: windows-latest
     steps:
-      - name: Setup environment
+      - name: Set up environment
         run: |
           cd $HOME
           git config --global user.name "github-actions[bot]"
@@ -139,12 +139,7 @@ jobs:
   #   name: Build macOS
   #   runs-on: macos-latest
   #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #       with:
-  #         path: ${{ env.REPOSITORY_PATH }}
-
-  #     - name: Setup depot_tools
+  #     - name: Set up environment
   #       run: |
   #         cd $HOME
   #         git config --global user.name "github-actions[bot]"
@@ -155,6 +150,11 @@ jobs:
   #         git config --global branch.autosetuprebase always
   #         git clone $DEPOT_TOOLS_GIT
   #         echo "$HOME/depot_tools" >> $GITHUB_PATH
+
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         path: ${{ env.REPOSITORY_PATH }}
 
   #     - name: Initialize gclient
   #       run: gclient
