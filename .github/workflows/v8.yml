@@ -9,37 +9,37 @@ env:
   DEPOT_TOOLS_BUNDLE: https://storage.googleapis.com/chrome-infra/depot_tools.zip
 
 jobs:
-  # upload-include:
-  #   name: Upload Include
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Set up environment
-  #       run: |
-  #         cd $HOME
-  #         git config --global user.name "github-actions[bot]"
-  #         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-  #         git config --global core.autocrlf false
-  #         git config --global core.filemode false
-  #         git config --global branch.autosetupmerge always
-  #         git config --global branch.autosetuprebase always
-  #         git clone $DEPOT_TOOLS_GIT
-  #         echo "$HOME/depot_tools" >> $GITHUB_PATH
+  upload-include:
+    name: Upload Include
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up environment
+        run: |
+          cd $HOME
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global core.autocrlf false
+          git config --global core.filemode false
+          git config --global branch.autosetupmerge always
+          git config --global branch.autosetuprebase always
+          git clone $DEPOT_TOOLS_GIT
+          echo "$HOME/depot_tools" >> $GITHUB_PATH
 
-  #     - name: Initialize gclient
-  #       run: gclient
+      - name: Initialize gclient
+        run: gclient
 
-  #     - name: Fetch source code
-  #       run: fetch v8
+      - name: Fetch source code
+        run: fetch v8
 
-  #     - name: Checkout stable branch
-  #       working-directory: v8
-  #       run: git checkout branch-heads/$STABLE_BRANCH
+      - name: Checkout stable branch
+        working-directory: v8
+        run: git checkout branch-heads/$STABLE_BRANCH
 
-  #     - name: Upload
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: include
-  #         path: v8/include
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: include
+          path: v8/include
 
   # build-linux:
   #   name: Build Linux
