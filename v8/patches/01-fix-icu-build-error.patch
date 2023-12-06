@@ -1,8 +1,0 @@
---- "a/third_party/icu/source/i18n/fmtable.cpp"
-+++ "b/third_party/icu/source/i18n/fmtable.cpp"
-@@ -57,4 +57,4 @@
- static inline UBool objectEquals(const UObject* a, const UObject* b) {
-     // LATER: return *a == *b;
--    return *((const Measure*) a) == *((const Measure*) b);
-+    return *((const Measure*) a) == *b;
- }
