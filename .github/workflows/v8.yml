@@ -41,50 +41,50 @@ jobs:
           name: include
           path: v8/include
 
-  # build-linux:
-  #   name: Build Linux
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Set up environment
-  #       run: |
-  #         cd $HOME
-  #         git config --global user.name "github-actions[bot]"
-  #         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-  #         git config --global core.autocrlf false
-  #         git config --global core.filemode false
-  #         git config --global branch.autosetupmerge always
-  #         git config --global branch.autosetuprebase always
-  #         git clone $DEPOT_TOOLS_GIT
-  #         echo "$HOME/depot_tools" >> $GITHUB_PATH
+  build-linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up environment
+        run: |
+          cd $HOME
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global core.autocrlf false
+          git config --global core.filemode false
+          git config --global branch.autosetupmerge always
+          git config --global branch.autosetuprebase always
+          git clone $DEPOT_TOOLS_GIT
+          echo "$HOME/depot_tools" >> $GITHUB_PATH
 
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #       with:
-  #         path: ${{ env.REPOSITORY_PATH }}
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: ${{ env.REPOSITORY_PATH }}
 
-  #     - name: Initialize gclient
-  #       run: gclient
+      - name: Initialize gclient
+        run: gclient
 
-  #     - name: Fetch source code
-  #       run: fetch v8
+      - name: Fetch source code
+        run: fetch v8
 
-  #     - name: Checkout stable branch
-  #       working-directory: v8
-  #       run: git checkout branch-heads/$STABLE_BRANCH
+      - name: Checkout stable branch
+        working-directory: v8
+        run: git checkout branch-heads/$STABLE_BRANCH
 
-  #     - name: Build
-  #       working-directory: v8
-  #       run: |
-  #         ./build/install-build-deps.sh
-  #         cp -a $REPOSITORY_PATH/v8/. .
-  #         gn gen out/x64.linux
-  #         ninja -C out/x64.linux v8_monolith
+      - name: Build
+        working-directory: v8
+        run: |
+          ./build/install-build-deps.sh
+          cp -a $REPOSITORY_PATH/v8/. .
+          gn gen out/x64.linux
+          ninja -C out/x64.linux v8_monolith
 
-  #     - name: Upload
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: v8-x64-linux
-  #         path: v8/out/x64.linux/obj/libv8_monolith.a
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: v8-x64-linux
+          path: v8/out/x64.linux/obj/libv8_monolith.a
 
   build-windows:
     name: Build Windows
@@ -134,46 +134,46 @@ jobs:
           name: v8-x64-windows
           path: v8/out/x64.windows/obj/v8_monolith.lib
 
-  # build-macos:
-  #   name: Build macOS
-  #   runs-on: macos-latest
-  #   steps:
-  #     - name: Set up environment
-  #       run: |
-  #         cd $HOME
-  #         git config --global user.name "github-actions[bot]"
-  #         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-  #         git config --global core.autocrlf false
-  #         git config --global core.filemode false
-  #         git config --global branch.autosetupmerge always
-  #         git config --global branch.autosetuprebase always
-  #         git clone $DEPOT_TOOLS_GIT
-  #         echo "$HOME/depot_tools" >> $GITHUB_PATH
+  build-macos:
+    name: Build macOS
+    runs-on: macos-latest
+    steps:
+      - name: Set up environment
+        run: |
+          cd $HOME
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global core.autocrlf false
+          git config --global core.filemode false
+          git config --global branch.autosetupmerge always
+          git config --global branch.autosetuprebase always
+          git clone $DEPOT_TOOLS_GIT
+          echo "$HOME/depot_tools" >> $GITHUB_PATH
 
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #       with:
-  #         path: ${{ env.REPOSITORY_PATH }}
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: ${{ env.REPOSITORY_PATH }}
 
-  #     - name: Initialize gclient
-  #       run: gclient
+      - name: Initialize gclient
+        run: gclient
 
-  #     - name: Fetch source code
-  #       run: fetch v8
+      - name: Fetch source code
+        run: fetch v8
 
-  #     - name: Checkout stable branch
-  #       working-directory: v8
-  #       run: git checkout branch-heads/$STABLE_BRANCH
+      - name: Checkout stable branch
+        working-directory: v8
+        run: git checkout branch-heads/$STABLE_BRANCH
 
-  #     - name: Build
-  #       working-directory: v8
-  #       run: |
-  #         cp -a $REPOSITORY_PATH/v8/. .
-  #         gn gen out/arm64.macos
-  #         ninja -C out/arm64.macos v8_monolith
+      - name: Build
+        working-directory: v8
+        run: |
+          cp -a $REPOSITORY_PATH/v8/. .
+          gn gen out/arm64.macos
+          ninja -C out/arm64.macos v8_monolith
 
-  #     - name: Upload
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: v8-arm64-macos
-  #         path: v8/out/arm64.macos/obj/libv8_monolith.a
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: v8-arm64-macos
+          path: v8/out/arm64.macos/obj/libv8_monolith.a
