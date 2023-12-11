@@ -1,6 +1,9 @@
 name: quickjs
 on: workflow_dispatch
 
+env:
+  REPOSITORY_PATH: ${{ github.workspace }}/${{ github.sha }}
+
 jobs:
   build-windows:
     name: Build Windows
@@ -9,19 +12,25 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
+      - name: Set up MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          pacboy: cmake:p toolchian:p
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           repository: bellard/quickjs
 
-      - name: Set up MSYS2
-        uses: msys2/setup-msys2@v2
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          msystem: UCRT64
-          install: mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-toolchain
+          path: ${{ env.REPOSITORY_PATH }}
 
       - name: Build
         run: |
+          cp $REPOSITORY_PATH/quickjs/CMakeLists.txt ./CMakeLists.txt
           cmake -G "MSYS Makefiles" -B ./build
           cmake --build ./build
 
