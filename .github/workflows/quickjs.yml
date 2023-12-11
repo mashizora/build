@@ -16,7 +16,7 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           msystem: UCRT64
-          pacboy: cmake:p toolchian:p
+          pacboy: cmake:p toolchain:p
 
       - name: Checkout
         uses: actions/checkout@v4
