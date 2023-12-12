@@ -34,11 +34,15 @@ jobs:
       - name: Build
         run: |
           cp $REPOSITORY_PATH/quickjs/CMakeLists.txt ./CMakeLists.txt
-          cmake -G "MSYS Makefiles" -B ./build
+          cmake -B ./build
           cmake --build ./build
+          mkdir ./out
+          cp ./quickjs.h ./out/quickjs.h
+          cp ./build/libquickjs.dll ./out/quickjs.dll
+          cp ./build/libquickjs.lib ./out/quickjs.lib
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: quickjs
-          path: ./
+          path: ./out/*
