@@ -10,24 +10,23 @@ endif()
 
 project(quickjs LANGUAGES C)
 
-set(CFLAGS -Wall -Wextra)
+set(CFLAGS -Wall)
 
-list(APPEND CFLAGS -O3 -flto=auto)
-
+list(APPEND CFLAGS -O3)
 file(STRINGS "VERSION" QJS_VERSION)
 
 add_library(quickjs SHARED
-            cutils.c
-            libbf.c
-            libregexp.c
-            libunicode.c
-            quickjs.c)
-
+    cutils.c
+    libbf.c
+    libregexp.c
+    libunicode.c
+    quickjs.c)
 
 target_compile_options(quickjs PRIVATE ${CFLAGS})
 target_compile_definitions(quickjs PRIVATE
-                            NDEBUG
-                            _GNU_SOURCE
-                            CONFIG_BIGNUM
-                            CONFIG_VERSION="\\\"${QJS_VERSION}\\\"")
+    NDEBUG
+    _GNU_SOURCE
+    CONFIG_BIGNUM
+    CONFIG_VERSION="\\\"${QJS_VERSION}\\\"")
 
+target_link_options(quickjs PRIVATE -static)
