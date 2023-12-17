@@ -12,12 +12,21 @@ project(quickjs LANGUAGES C)
 
 file(STRINGS "VERSION" QJS_VERSION)
 
-add_library(quickjs SHARED
-    cutils.c
-    libbf.c
-    libregexp.c
-    libunicode.c
-    quickjs.c)
+if(WIN32)
+    add_library(quickjs SHARED
+        cutils.c
+        libbf.c
+        libregexp.c
+        libunicode.c
+        quickjs.c)
+else()
+    add_library(quickjs STATIC
+        cutils.c
+        libbf.c
+        libregexp.c
+        libunicode.c
+        quickjs.c)
+endif()
 
 target_compile_options(quickjs PRIVATE -O3)
 target_compile_definitions(quickjs PRIVATE
