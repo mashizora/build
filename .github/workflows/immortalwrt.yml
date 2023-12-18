@@ -46,7 +46,7 @@ jobs:
           make image FILES="files" PACKAGES="luci-app-homeproxy"
 
       - name: Upload images
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: immortalwrt
           path: bin/targets/x86/64/

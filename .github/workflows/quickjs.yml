@@ -42,7 +42,7 @@ jobs:
           cp ./build/libquickjs.lib ./out/quickjs.lib
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: quickjs-windows
           path: ./out/*
@@ -68,7 +68,7 @@ jobs:
           cmake --build ./build
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: quickjs-linux
           path: ./*
@@ -94,7 +94,7 @@ jobs:
           cmake --build ./build
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: quickjs-macos
           path: ./*
