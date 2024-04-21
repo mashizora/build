@@ -43,7 +43,7 @@ jobs:
       - name: Build images
         run: |
           cp -a $REPOSITORY_PATH/immortalwrt/. .
-          make image FILES="files" PACKAGES="ip-full luci-app-homeproxy"
+          make image FILES="files" PACKAGES="luci-app-homeproxy"
 
       - name: Upload images
         uses: actions/upload-artifact@v4
